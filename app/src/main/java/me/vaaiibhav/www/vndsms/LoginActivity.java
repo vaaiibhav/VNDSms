@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         userloginPrefs =getApplicationContext().getSharedPreferences("userloginPref",0);
         Username= userloginPrefs.getString(cs.PREF_USERNAME,"");
-        speditor = userloginPrefs.edit();
+       // speditor = userloginPrefs.edit();
 
 
         checkAndRequestPermissions();
@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity  {
         rq = Volley.newRequestQueue(LoginActivity.this);
 
         if (!Username.isEmpty()){
+
             netlogger();
         }
         else {
@@ -76,7 +77,10 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     private void netlogger() {
-        StringRequest sr = new StringRequest(Request.Method.GET, cs.URLLink, new Response.Listener<String>() {
+        String prefname =userloginPrefs.getString(cs.PREF_USERNAME,"");
+        String prefpass =userloginPrefs.getString(cs.PREF_PASSWORD,"");
+      String newlink=String.format("https://vndinfomedia.com/SmsApi/userlogin.php?username=%1$s&password=%2$s&serialno=%3$s",prefname,prefpass,n);
+        StringRequest sr = new StringRequest(Request.Method.GET, newlink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.trim().equals("gotit")){
@@ -111,9 +115,8 @@ public class LoginActivity extends AppCompatActivity  {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<String, String>();
-                map.put(cs.KEY_USERNAME,userloginPrefs.getString(cs.PREF_USERNAME,""));
-                map.put(cs.KEY_PASSWORD,userloginPrefs.getString(cs.PREF_PASSWORD,""));
-                map.put(cs.KEY_SERIALNUMBER,n);
+//                map.put(cs.KEY_PASSWORD,userloginPrefs.getString(cs.PREF_PASSWORD,""));
+  //              map.put(cs.KEY_SERIALNUMBER,n);
                 return  map;
 
             }
